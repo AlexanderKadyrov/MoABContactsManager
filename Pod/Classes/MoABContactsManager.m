@@ -203,12 +203,48 @@
     
     dispatch_async(_contactsManagerQueue, ^{
         
-        NSArray *contactsFromAB = (__bridge_transfer NSArray *)ABAddressBookCopyArrayOfAllPeople(_addressBook);
+        
+        ///
+        
+        
+        NSMutableSet *unifiedRecordsSet = [NSMutableSet set];
+        
+        NSArray *unifiedRecordsSetArray;
+        
+        NSSet *objects;
+        
+        CFArrayRef records = ABAddressBookCopyArrayOfAllPeople(_addressBook);
+        for (CFIndex i = 0; i < CFArrayGetCount(records); i++) {
+            NSMutableSet *contactSet = [NSMutableSet set];
+            
+            ABRecordRef record = CFArrayGetValueAtIndex(records, i);
+            ABRecordID contactId = ABRecordGetRecordID(record);
+            [contactSet addObject:(__bridge id)record];
+            
+            NSArray *linkedRecordsArray = (__bridge NSArray *)ABPersonCopyArrayOfAllLinkedPeople(record);
+            
+            [contactSet addObjectsFromArray:linkedRecordsArray];
+            objects = [[NSSet alloc]initWithSet:contactSet];
+            
+            [unifiedRecordsSet addObject:objects];
+            CFRelease(record);
+        }
+        
+        CFRelease(records);
+        
+        unifiedRecordsSetArray = [unifiedRecordsSet allObjects];
+        
+        
+        
+        NSMutableArray <NSSet *> *resultArray = [NSMutableArray new];
+        for (NSSet *objects in unifiedRecordsSetArray) {
+            [resultArray addObject:[objects allObjects].firstObject];
+        }
         
         NSMutableArray *contacts = [NSMutableArray array];
     
         
-        for (id contactObj in contactsFromAB) {
+        for (id contactObj in resultArray) {
             
             ABRecordRef contactRecord = (__bridge ABRecordRef)contactObj;
             
