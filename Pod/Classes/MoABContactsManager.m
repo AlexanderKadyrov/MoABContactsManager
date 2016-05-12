@@ -300,6 +300,10 @@
                 [contact setAddresses:[self arrayFromProperty:kABPersonAddressProperty ofContact:contactRecord]];
             }
             
+            if (_fieldsMask & MoContactFieldUrls) {
+                [contact setUrls:[self arrayFromProperty:kABPersonURLProperty ofContact:contactRecord]];
+            }
+            
             if (_fieldsMask & MoContactFieldNickName) {
                 [contact setNickName:[self objectFromProperty:kABPersonNicknameProperty ofContact:contactRecord]];
             }
@@ -492,6 +496,10 @@
 
     if ((_fieldsMask & MoContactFieldPhones) || (contact.phones && [contact.phones count] > 0)) {
         [self updateArrayProperty:kABPersonPhoneProperty withArray:contact.phones ofContact:contactRecord error:errorRef];
+    }
+    
+    if ((_fieldsMask & MoContactFieldUrls) || (contact.urls && [contact.urls count] > 0)) {
+        [self updateArrayProperty:kABPersonURLProperty withArray:contact.urls ofContact:contactRecord error:errorRef];
     }
 
     if ((_fieldsMask & MoContactFieldEmails) || (contact.emails && [contact.emails count] > 0)) {

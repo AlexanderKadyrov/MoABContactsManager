@@ -30,7 +30,7 @@
     [super viewDidLoad];
     
     [[MoABContactsManager sharedManager] setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"fullName" ascending:YES]]];
-    [[MoABContactsManager sharedManager] setFieldsMask:MoContactFieldFirstName | MoContactFieldLastName | MoContactFieldEmails | MoContactFieldPhones | MoContactFieldThumbnailProfilePicture | MoContactFieldAddress];
+    [[MoABContactsManager sharedManager] setFieldsMask:MoContactFieldFirstName | MoContactFieldLastName | MoContactFieldEmails | MoContactFieldPhones | MoContactFieldThumbnailProfilePicture | MoContactFieldAddress | MoContactFieldUrls];
     [[MoABContactsManager sharedManager] setDelegate:self];
     
 }
@@ -63,9 +63,11 @@
 {
     [[MoABContactsManager sharedManager] contacts:^(ABAuthorizationStatus authorizationStatus, NSArray *contacts, NSError *error) {
         
+        
         if (error) {
             NSLog(@"Error = %@", [error localizedDescription]);
         }else {
+            
             if (authorizationStatus == kABAuthorizationStatusAuthorized) {
                 _contacts = contacts;
                 [_contactsTableView reloadData];
