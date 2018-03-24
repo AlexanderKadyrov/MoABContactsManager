@@ -6,10 +6,10 @@
 //  Copyright (c) 2015 mostachoio. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import "Mantle.h"
 
-@interface MoContact : NSObject
+@interface MoContact : MTLModel <MTLJSONSerializing>
 
 /*!
  @abstract Returns the contact ID.

@@ -29,4 +29,6 @@ Pod::Spec.new do |s|
     'MoABContactsManager' => ['Pod/Assets/*.png']
   }
 
+  s.dependency 'Mantle'
+
 end
